@@ -95,8 +95,7 @@ public class BookLibraryActivity extends ListActivity {
         }
         return books;
     }
-
-
+    
     public void getListItemsView(BookFilter bookFilter) {
         listView = (ListView) findViewById(android.R.id.list);
         listAdapter = new BookListViewAdapter(this, R.layout.activity_book, this.getBooks(bookFilter));
