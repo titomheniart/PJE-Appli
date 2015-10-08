@@ -30,9 +30,17 @@ public class BooksDatabase {
                 values);
     }
 
-    public Cursor query(String sqlQuery, String[] selectionArgs) {
+    public void deleteBookByISBN(String isbn){
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        String selection = BooksDatabaseContract.BooksDatabaseColumns.ISBN + " LIKE ?";
+        String[] selectionArgs = { isbn };
+        database.delete(BooksDatabaseContract.BooksDatabaseColumns.TABLE_NAME, selection, selectionArgs);
+    }
+
+    public Cursor query(String sqlQuery) {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor c = db.rawQuery(sqlQuery, selectionArgs);
+        String[] args = {};
+        Cursor c = db.rawQuery(sqlQuery, args);
         return c;
     }
 }

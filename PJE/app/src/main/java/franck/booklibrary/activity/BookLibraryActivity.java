@@ -20,7 +20,6 @@ import java.util.List;
 
 import franck.booklibrary.Book;
 import franck.booklibrary.BookFilter;
-import franck.booklibrary.BookLibrary;
 import franck.booklibrary.BookListViewAdapter;
 import franck.booklibrary.R;
 import franck.booklibrary.database.BooksDatabase;
@@ -78,8 +77,7 @@ public class BookLibraryActivity extends ListActivity {
     public List<Book> getBooks(BookFilter bookFilter) {
         List<Book> books = new ArrayList<Book>();
         BooksDatabase database = new BooksDatabase(getApplicationContext());
-        String[] args = {};
-        Cursor cursor = database.query("SELECT * FROM " + BooksDatabaseContract.BooksDatabaseColumns.TABLE_NAME, args);
+        Cursor cursor = database.query("SELECT * FROM " + BooksDatabaseContract.BooksDatabaseColumns.TABLE_NAME);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
@@ -95,7 +93,7 @@ public class BookLibraryActivity extends ListActivity {
         }
         return books;
     }
-    
+
     public void getListItemsView(BookFilter bookFilter) {
         listView = (ListView) findViewById(android.R.id.list);
         listAdapter = new BookListViewAdapter(this, R.layout.activity_book, this.getBooks(bookFilter));
@@ -112,6 +110,7 @@ public class BookLibraryActivity extends ListActivity {
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                BooksDatabase database = new BooksDatabase(getApplicationContext());
                 switch (item.getItemId()) {
                     case R.id.delete:
                         SparseBooleanArray selected = listAdapter.getSelectedIds();
@@ -119,7 +118,7 @@ public class BookLibraryActivity extends ListActivity {
                             if (selected.valueAt(i)) {
                                 Book selectedItem = listAdapter.getItem(selected.keyAt(i));
                                 listAdapter.remove(selectedItem);
-                                BookLibrary.getInstance().removeBook(selectedItem);
+                                database.deleteBookByISBN(selectedItem.getIsbn());
                             }
                         }
                         mode.finish();

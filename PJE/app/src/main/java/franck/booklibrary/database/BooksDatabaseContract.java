@@ -10,7 +10,7 @@ public final class BooksDatabaseContract {
     public static final String COMMA_SEP = ",";
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + BooksDatabaseColumns.TABLE_NAME + " (" +
-                    BooksDatabaseColumns._ID + " INTEGER PRIMARY KEY," +
+                    BooksDatabaseColumns.ID + " INTEGER PRIMARY KEY," +
                     BooksDatabaseColumns.ID + TEXT_TYPE + COMMA_SEP +
                     BooksDatabaseColumns.TITLE + TEXT_TYPE + COMMA_SEP +
                     BooksDatabaseColumns.AUTHOR + TEXT_TYPE + COMMA_SEP +

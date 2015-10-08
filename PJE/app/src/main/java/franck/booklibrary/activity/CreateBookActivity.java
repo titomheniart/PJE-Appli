@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import franck.booklibrary.Book;
-import franck.booklibrary.BookLibrary;
 import franck.booklibrary.R;
 import franck.booklibrary.database.BooksDatabase;
 
