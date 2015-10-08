@@ -1,7 +1,7 @@
 package franck.booklibrary;
 
 /**
- * Created by franc on 24/09/2015.
+ * Created by franck on 24/09/2015.
  */
 public class Book {
 
