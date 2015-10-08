@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -14,11 +15,16 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import franck.booklibrary.Book;
 import franck.booklibrary.BookFilter;
 import franck.booklibrary.BookLibrary;
 import franck.booklibrary.BookListViewAdapter;
 import franck.booklibrary.R;
+import franck.booklibrary.database.BooksDatabase;
+import franck.booklibrary.database.BooksDatabaseContract;
 
 public class BookLibraryActivity extends ListActivity {
     protected ListView listView;
@@ -47,12 +53,10 @@ public class BookLibraryActivity extends ListActivity {
         // automatically handle clicks on the BookLibraryActivity/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -71,13 +75,31 @@ public class BookLibraryActivity extends ListActivity {
         }
     }
 
-    public BookLibrary getBookLibrary() {
-        return BookLibrary.getInstance();
+    public List<Book> getBooks(BookFilter bookFilter) {
+        List<Book> books = new ArrayList<Book>();
+        BooksDatabase database = new BooksDatabase(getApplicationContext());
+        String[] args = {};
+        Cursor cursor = database.query("SELECT * FROM " + BooksDatabaseContract.BooksDatabaseColumns.TABLE_NAME, args);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    String title = cursor.getString(cursor.getColumnIndex(BooksDatabaseContract.BooksDatabaseColumns.TITLE));
+                    String author = cursor.getString(cursor.getColumnIndex(BooksDatabaseContract.BooksDatabaseColumns.AUTHOR));
+                    String isbn = cursor.getString(cursor.getColumnIndex(BooksDatabaseContract.BooksDatabaseColumns.ISBN));
+                    Book book = new Book(title, author, isbn);
+                    if(bookFilter.matches(book))
+                        books.add(book);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+        return books;
     }
+
 
     public void getListItemsView(BookFilter bookFilter) {
         listView = (ListView) findViewById(android.R.id.list);
-        listAdapter = new BookListViewAdapter(this, R.layout.activity_book, this.getBookLibrary().getBooks(bookFilter));
+        listAdapter = new BookListViewAdapter(this, R.layout.activity_book, this.getBooks(bookFilter));
         listView.setAdapter(listAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {

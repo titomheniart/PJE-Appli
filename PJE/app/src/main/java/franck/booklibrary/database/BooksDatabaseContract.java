@@ -14,7 +14,7 @@ public final class BooksDatabaseContract {
                     BooksDatabaseColumns.ID + TEXT_TYPE + COMMA_SEP +
                     BooksDatabaseColumns.TITLE + TEXT_TYPE + COMMA_SEP +
                     BooksDatabaseColumns.AUTHOR + TEXT_TYPE + COMMA_SEP +
-                    BooksDatabaseColumns.ISBN + TEXT_TYPE + COMMA_SEP +
+                    BooksDatabaseColumns.ISBN + TEXT_TYPE +
                     " )";
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + BooksDatabaseColumns.TABLE_NAME;

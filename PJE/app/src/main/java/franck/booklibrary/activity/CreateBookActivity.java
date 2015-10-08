@@ -11,16 +11,19 @@ import android.widget.EditText;
 import franck.booklibrary.Book;
 import franck.booklibrary.BookLibrary;
 import franck.booklibrary.R;
+import franck.booklibrary.database.BooksDatabase;
 
 /**
  * Created by franc on 03/10/2015.
  */
 public class CreateBookActivity extends Activity {
+    protected BooksDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createbook);
+        database = new BooksDatabase(getApplicationContext());
     }
 
     /**
@@ -30,7 +33,7 @@ public class CreateBookActivity extends Activity {
         EditText editTitle = (EditText) findViewById(R.id.editTitle);
         EditText editAuthor = (EditText) findViewById(R.id.editAuthor);
         EditText editISBN = (EditText) findViewById(R.id.editIsbn);
-        BookLibrary.getInstance().addBook(new Book(editTitle.getText().toString(), editAuthor.getText().toString(), editISBN.getText().toString()));
+        database.createBook(editTitle.getText().toString(), editAuthor.getText().toString(), editISBN.getText().toString());
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage("Book created !");
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
